@@ -18,7 +18,6 @@ var handleError = (err, res) => {
 var tempPath = path.join(__dirname, '../../public/temp');
 var upload = multer({ dest: tempPath }).any();
 
-debugger
 var handleUpload = (req, res) => {
   upload(req, res, (error) => {
     if (error instanceof multer.MulterError) {
