@@ -17,8 +17,6 @@ const {
 } = FormElements;
 
 class ReactForm extends React.Component {
-  debugger;
-  
   form;
 
   inputs = {};

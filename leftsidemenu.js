@@ -1,8 +1,10 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import store from './src/stores/store';
-import { ReactFormGenerator } from './src/index';
+ import { ReactFormGenerator } from './src/index';
+ import files from './src/data/Formw3.json';
 
-const answers = {};
+ const answers = {};
 // const answers = {
 //   'dropdown_38716F53-51AA-4A53-9A9B-367603D82548': 'd2',
 //   'checkboxes_8D6BDC45-76A3-4157-9D62-94B6B24BB833': [
@@ -14,36 +16,31 @@ const answers = {};
 //   ],
 //   'rating_3B3491B3-71AC-4A68-AB8C-A2B5009346CB': 4,
 // };
+// var fs = require('fs');
+// var files = fs.readdirSync('/assets/photos/');
 
-export default class Demobar extends React.Component {
+export default class LeftSideMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      data: files,
       previewVisible: false,
       shortPreviewVisible: false,
       roPreviewVisible: false,
-      saveTemplate:false,
-      formName:"sample",
+      //jsondata: files,
     };
 
     const update = this._onChange.bind(this);
     this._onSubmit = this._onSubmit.bind(this);
 
     store.subscribe(state => update(state.data));
+    console.log(files);
   }
 
   showPreview() {
     this.setState({
       previewVisible: true,
     });
-  }
-
-  SaveTemplate()
-  {
-    this.setState({
-      saveTemplate:true,
-    })
   }
 
   showShortPreview() {
@@ -63,7 +60,6 @@ export default class Demobar extends React.Component {
       previewVisible: false,
       shortPreviewVisible: false,
       roPreviewVisible: false,
-      saveTemplate:false,
     });
   }
 
@@ -73,28 +69,15 @@ export default class Demobar extends React.Component {
     });
   }
 
-  saveFrom =()=>{
-store.dispatch('saveForm',{issave:true, formName:this.state.formName});
-}
   // eslint-disable-next-line no-unused-vars
   _onSubmit(data) {
     // console.log('onSubmit', data);
     // Place code to post json data to server here
   }
 
-  readtext = (event)=>
-  {
-    this.setState({formName:event.target.value});
-  }
-
   render() {
     let modalClass = 'modal';
     if (this.state.previewVisible) {
-      modalClass += ' show d-block';
-    }
-
-    if(this.state.saveTemplate)
-    {
       modalClass += ' show d-block';
     }
 
@@ -109,24 +92,28 @@ store.dispatch('saveForm',{issave:true, formName:this.state.formName});
     }
 
     return (
-      <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
-          <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                        <i class="fas fa-align-left"></i>
-                        <span>Toggle Sidebar</span>
-                    </button>
+      <div className="clearfix" style={{ margin: '10px', width: '70%', verticalAlign: 'center' }}>
+        <ReactFormGenerator
+                  download_path=""
+                  back_action="/"
+                  back_name="Back"
+                  answer_data={answers}
+                  action_name="Save"
+                  form_action="/api/form"
+                  form_method="POST"
+                  hide_actions={true}
+                  // skip_validations={true}
+                  // onSubmit={this._onSubmit}
+                  variables={this.props.variables}
+                  data={this.state.data}
+                  locale='en'/>
+        {/* <h4 className="float-right">Forms</h4><br></br> */}
+        <button className="btn btn-link" id='btnForm' style={{ marginRight: '10px' }} onClick={() => this.showPreview()}> Form 1</button>
 
-        <button className="btn btn-primary float-right" id="formPreview" style={{ marginRight: '10px' }}>Preview Form</button>
-        <button className="btn btn-primary float-right" id="formEditor" style={{ marginRight: '10px' }}>Form Editor</button>
-        <button className="btn btn-primary float-right" style={{ marginRight: '10px' }} onClick={() => this.SaveTemplate()}>Save Form</button>
-        {/* <button className="btn btn-primary float-right" style={{ marginRight: '10px' }} onClick={() => this.showPreview()}>Preview Form</button>
-        <button className="btn btn-primary float-right" style={{ marginRight: '10px' }} onClick={() => this.SaveTemplate()}>Template</button>
-        <button className="btn btn-default float-right" style={{ marginRight: '10px' }} onClick={() => this.showShortPreview()}>Alternate/Short Form</button>
-        <button className="btn btn-default float-right" style={{ marginRight: '10px' }} onClick={() => this.showRoPreview()}>Read Only Form</button> */}
-
-        { this.state.previewVisible &&
-          <div className={modalClass} role="dialog">
-            <div className="modal-dialog modal-lg" role="document">
-              <div className="modal-content">
+        {/* { this.state.previewVisible &&
+           <div className={modalClass} role="dialog">
+             <div className="modal-dialog modal-lg" role="document">
+               <div className="modal-content">
                 <ReactFormGenerator
                   download_path=""
                   back_action="/"
@@ -135,34 +122,18 @@ store.dispatch('saveForm',{issave:true, formName:this.state.formName});
                   action_name="Save"
                   form_action="/api/form"
                   form_method="POST"
+                  hide_actions={true}
                   // skip_validations={true}
                   // onSubmit={this._onSubmit}
                   variables={this.props.variables}
                   data={this.state.data}
                   locale='en'/>
-
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-         { this.state.saveTemplate &&
-          <div className={modalClass} role="dialog">
-            <div className="modal-dialog modal-lg" role="document">
-              <div className="modal-content">
-                <div className='row'>
-                  <div className='col-md-3'><label>Form Name:</label></div>
-                  <div className='col-md-9'><input type='text' className='form-control' value={this.state.formName} onChange={this.readtext}/></div>
-                  </div>
-                <div className="modal-footer">
-                <button type="button" className="btn btn-success" data-dismiss="modal" onClick={this.saveFrom}>Save</button>
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
+                 <div className="modal-footer">
+                   <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
+                 </div>
+               </div>
+             </div>
+           </div>
         }
 
         { this.state.roPreviewVisible &&
@@ -177,7 +148,7 @@ store.dispatch('saveForm',{issave:true, formName:this.state.formName});
                   action_name="Save"
                   form_action="/"
                   form_method="POST"
-                  read_only={true}
+                  // read_only={false}
                   variables={this.props.variables}
                   hide_actions={true}
                   data={this.state.data}
@@ -214,7 +185,7 @@ store.dispatch('saveForm',{issave:true, formName:this.state.formName});
               </div>
             </div>
           </div>
-        }
+        } */}
       </div>
     );
   }

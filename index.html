@@ -34,7 +34,35 @@
   </script>
   <div id="demo-bar"></div> -->
   <div id="form-builder"></div>
+  <div id="form"></div>
   <script src="dist/app.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      let isEditorVisible=false;
+      
+      $('#formEditor').on('click', function () {
+        $('#form-builder').show();
+        $('#formEditor').hide();
+        $('#formPreview').show();
+        $('#form').hide();
+        });
+        $('#formPreview').on('click', function () {
+          $('#form-builder').hide();
+        $('#formEditor').show();
+        $('#formPreview').hide();
+        });
+        $('#formPreview').hide();
+      $('#form-builder').hide();
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+        $('#btnForm').on('click', function () {
+            $('#form-builder').hide();
+            $('#form').show();
+        });
+    });
+</script>
 </body>
 
 </html>

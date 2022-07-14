@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import DemoBar from './demobar';
+import LeftSideMenu from './leftsidemenu';
 // eslint-disable-next-line no-unused-vars
 import FormBuilder, { Registry } from './src/index';
 import * as variables from './variables';
@@ -155,4 +156,8 @@ ReactDOM.render(
 ReactDOM.render(
   <DemoBar variables={variables} />,
   document.getElementById('demo-bar'),
+);
+ReactDOM.render(
+  <LeftSideMenu variables={variables} />,
+  document.getElementById('form'),
 );
